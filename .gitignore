@@ -6,7 +6,7 @@ build.gradle
 *.iml
 gradle.properties
 gradlew
-gradle.bat
+gradlew.bat
 local.properties
 settings.gradle
 
