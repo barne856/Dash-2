@@ -20,4 +20,9 @@ public class GameObject {
         shader.render();
         model.render();
     }
+
+    public int getProgramID()
+    {
+        return shader.getProgramID();
+    }
 }

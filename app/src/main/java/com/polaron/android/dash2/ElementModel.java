@@ -1,43 +1,31 @@
 package com.polaron.android.dash2;
 
+import android.opengl.GLES20;
 import android.opengl.GLES30;
-import android.util.Log;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
+public class ElementModel extends Model {
 
-public class Model {
-
-    int[] buffers = new int[2];
-    int[] vertexArray = new int[1];
+    public int[] elementBuffers = new int[3];
     int count;
-    FloatBuffer vertexFloatBuffer;
-    FloatBuffer normalFloatBuffer;
-    float t = 0.0f;
-    float dt = 0.01f;
+    IntBuffer indexIntBuffer;
 
-    Model()
+    ElementModel(float[] vertices, float[] normals, int[] indices)
     {
-
-    }
-
-    Model(float[] vertices, float[] normals)
-    {
-        count = vertices.length;
+        count = indices.length;
 
         GLES30.glGenVertexArrays(1, vertexArray, 0);
         GLES30.glBindVertexArray(vertexArray[0]);
-        GLES30.glGenBuffers(2, buffers, 0);
+        GLES30.glGenBuffers(3, elementBuffers, 0);
 
-        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, buffers[0]);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, elementBuffers[0]);
         GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, 4*vertices.length, null, GLES30.GL_DYNAMIC_DRAW);
         vertexFloatBuffer =
-                ( ( ByteBuffer ) GLES30.glMapBufferRange (
+                ( (ByteBuffer) GLES30.glMapBufferRange (
                         GLES30.GL_ARRAY_BUFFER, 0, 4*vertices.length,
                         GLES30.GL_MAP_WRITE_BIT | GLES30.GL_MAP_INVALIDATE_BUFFER_BIT | GLES30.GL_MAP_INVALIDATE_RANGE_BIT)
                 ).order ( ByteOrder.nativeOrder() ).asFloatBuffer();
@@ -46,7 +34,7 @@ public class Model {
         GLES30.glEnableVertexAttribArray(0);
         GLES30.glUnmapBuffer(GLES30.GL_ARRAY_BUFFER);
 
-        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, buffers[1]);
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, elementBuffers[1]);
         GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, 4*normals.length, null, GLES30.GL_DYNAMIC_DRAW);
         normalFloatBuffer =
                 ( ( ByteBuffer ) GLES30.glMapBufferRange (
@@ -59,12 +47,18 @@ public class Model {
 
         GLES30.glUnmapBuffer(GLES30.GL_ARRAY_BUFFER);
 
+        indexIntBuffer = ByteBuffer.allocateDirect(4*indices.length).order(ByteOrder.nativeOrder()).asIntBuffer();
+        indexIntBuffer.put(indices).position(0);
+
+        GLES30.glBindBuffer(GLES30.GL_ELEMENT_ARRAY_BUFFER, elementBuffers[2]);
+        GLES30.glBufferData(GLES30.GL_ELEMENT_ARRAY_BUFFER, 4*count, indexIntBuffer, GLES30.GL_STATIC_DRAW);
+
     }
 
+    @Override
     public void render()
     {
         GLES30.glBindVertexArray(vertexArray[0]);
-        GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, count/3);
+        GLES30.glDrawElements(GLES30.GL_TRIANGLES, count, GLES30.GL_UNSIGNED_INT, 0);
     }
-
 }

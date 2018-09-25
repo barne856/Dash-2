@@ -12,9 +12,9 @@ in vec3 L;
 in vec3 V;
 
 // Material properties
-vec4 diffuse_albedo = vec4(1.0, 1.0, 1.0, 1.0);
-vec3 specular_albedo = vec3(0.7);
-float specular_power = 128.0;
+vec4 diffuse_albedo = vec4(0.7);
+vec3 specular_albedo = vec3(1.0);
+float specular_power = 8.0;
 
 vec3 rim_lighting(vec3 N, vec3 V)
 {
@@ -30,6 +30,8 @@ vec3 rim_lighting(vec3 N, vec3 V)
 
 void main(void)
 {
+    diffuse_albedo = 0.7*uColor;
+    diffuse_albedo.a = 1.0;
     // Normalize the incoming N, L and V vectors
     vec3 N = normalize(N);
     vec3 L = normalize(L);
@@ -44,4 +46,5 @@ void main(void)
     // Write final color to the framebuffer
     color = vec4(diffuse + specular, 1.0) + uColor*0.1;
     color[3] = 1.0;
+
 }

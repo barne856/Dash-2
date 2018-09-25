@@ -7,7 +7,7 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-vec3 light_pos = vec3(10.0, 10.0, 10.0);
+uniform vec3 light_pos;
 
 // Inputs from vertex shader
 out vec3 N;

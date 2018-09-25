@@ -5,14 +5,17 @@ import android.opengl.GLES30;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import static com.polaron.android.dash2.vmath.*;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class Triangle extends GameObject {
     int colorLocation;
+    int modelLocation;
     float[] color;
     Triangle()
     {
+
         float[] vertices = new float[]
                 {-0.5f, -0.5f, 0.0f,
                         0.5f, -0.5f, 0.0f,
@@ -30,6 +33,8 @@ public class Triangle extends GameObject {
         shader = program;
         color = new float[]{1.0f, 0.419f, 0.380f, 1.0f};
         colorLocation = GLES30.glGetUniformLocation(shader.getProgramID(), "uColor");
+
+        modelLocation = GLES30.glGetUniformLocation(shader.getProgramID(), "model");
     }
 
     @Override
@@ -59,5 +64,8 @@ public class Triangle extends GameObject {
 
         color = new float[]{1.0f, 0.2f, 0.380f, 1.0f};
         GLES30.glUniform4fv(colorLocation, 1, color, 0);
+
+        GLES30.glUniformMatrix4fv(modelLocation, 1, false, translation((float)(0.5*cos(t)), (float)(0.5*sin(t)), 0.0f), 0 );
+
     }
 }

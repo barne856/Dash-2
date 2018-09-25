@@ -1,13 +1,11 @@
 package com.polaron.android.dash2;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.view.View;
 import android.view.WindowManager;
 
-public class StartScreen extends Activity {
+public class MainActivity extends Activity {
     private GLSurfaceView glSurface;
 
     @Override
@@ -18,7 +16,7 @@ public class StartScreen extends Activity {
         // as the ContentView for this Activity.
         glSurface = new GLSurfaceView(this);
         glSurface.setEGLContextClientVersion(2);
-        glSurface.setRenderer(new StartScreenRenderer());
+        glSurface.setRenderer(new MainRenderer());
         setContentView(glSurface);
 
     }
