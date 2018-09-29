@@ -5,17 +5,22 @@ import android.opengl.GLES30;
 
 public class Sphere extends GameObject {
 
-    class UniformLocations
-    {
-        int MODEL, COLOR;
-    }
-    UniformLocations uLocs = new UniformLocations();
+    float[] translationMatrix = vmath.identityMatrix();
+    float[] scaleMatrix = vmath.identityMatrix();
+    float[] modelMatrix = vmath.identityMatrix();
+    float scale = 1.0f;
+    float[] position = new float[]{0.0f, 0.0f, 0.0f};
 
-    float[] translation = new float[16];
+    Camera camera;
 
     Sphere()
     {
 
+    }
+
+    Sphere(Camera camera, ShaderProgram program)
+    {
+        this.camera = camera;
         int recursionLevel = 4;
 
     float x = 0.525731112119133606f;
@@ -65,16 +70,17 @@ public class Sphere extends GameObject {
 
     Model sphere = new Model(normals, normals);
     //ShaderProgram program = new ShaderProgram("assets/Objects/Sphere/VertexShader.glsl", "assets/Objects/Sphere/FragmentShader.glsl");
-    ShaderProgram program = new ShaderProgram("assets/Shaders/ToonVertexShader.glsl", "assets/Shaders/ToonFragmentShader.glsl");
+    //ShaderProgram program = new ShaderProgram("assets/Shaders/ToonVertexShader.glsl", "assets/Shaders/ToonFragmentShader.glsl");
 
     model = sphere;
     shader = program;
 
     // Model
         uLocs.MODEL = GLES30.glGetUniformLocation(program.getProgramID(), "model");
-        GLES30.glUniformMatrix4fv(uLocs.MODEL, 1, false, vmath.identityMatrix(), 0);
+        GLES30.glUniformMatrix4fv(uLocs.MODEL, 1, false, modelMatrix, 0);
     // Color
-        float[] color = new float[]{0.439f, 0.666f, 0.960f, 1.0f};
+        float[] color = new float[]{0.905f, 0.419f, 0.313f, 1.0f};
+        //float[] color = new float[]{0.439f, 0.666f, 0.960f, 1.0f};
         uLocs.COLOR = GLES30.glGetUniformLocation(program.getProgramID(), "uColor");
         GLES30.glUniform4fv(uLocs.COLOR, 1, color, 0);
 
@@ -83,8 +89,12 @@ public class Sphere extends GameObject {
     @Override
     public void render(float t)
     {
-        super.render(t);
         update(t);
+        updateModelMatrix();
+        shader.render();
+        GLES30.glUniformMatrix4fv(uLocs.MODEL, 1, false, modelMatrix, 0);
+        camera.render(shader.getProgramID());
+        model.render();
     }
 
     private void update(float t)
@@ -129,8 +139,21 @@ public class Sphere extends GameObject {
 
     public void setPosition(float[] position)
     {
-        translation = vmath.translation(position[0], position[1], position[2]);
-        GLES30.glUniformMatrix4fv(uLocs.MODEL, 1, false, translation, 0);
+        this.position = position;
+        translationMatrix = vmath.translation(position[0]/scale, position[1]/scale, position[2]/scale);
+        updateModelMatrix();
+    }
+
+    public void setScale(float scale)
+    {
+        this.scale = scale;
+        scaleMatrix = vmath.scaleUniform(scale);
+        setPosition(position);
+    }
+
+    private void updateModelMatrix()
+    {
+        modelMatrix = vmath.matrixMult(scaleMatrix, translationMatrix);
     }
 
 }

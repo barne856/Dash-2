@@ -4,6 +4,12 @@ public class GameObject {
     Model model;
     ShaderProgram shader;
 
+    class UniformLocations
+    {
+        int MODEL, COLOR;
+    }
+    UniformLocations uLocs = new UniformLocations();
+
     GameObject()
     {
 

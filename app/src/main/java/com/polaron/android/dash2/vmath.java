@@ -59,8 +59,9 @@ public final class vmath {
     public static float[] lookat(float[] eye, float[] center, float[] up)
     {
         float[] f = normalize(subtractVectors(eye, center));
-        float[] s = cross(new float[]{0.0f, 1.0f, 0.0f}, f);
-        float[] upN = cross(f, s);
+        float[] upN = vmath.normalize(up);
+        float[] s = cross(upN, f);
+
         float[] M = new float[]
                 {
                         s[0], upN[0], f[0], 0.0f,
@@ -88,6 +89,17 @@ public final class vmath {
                         s, 0.0f, 0.0f, 0.0f,
                         0.0f, s, 0.0f, 0.0f,
                         0.0f, 0.0f, s, 0.0f,
+                        0.0f, 0.0f, 0.0f, 1.0f
+                };
+    }
+
+    public static float[] scaleNonUniform(float x, float y, float z)
+    {
+        return new float[]
+                {
+                        x, 0.0f, 0.0f, 0.0f,
+                        0.0f, y, 0.0f, 0.0f,
+                        0.0f, 0.0f, z, 0.0f,
                         0.0f, 0.0f, 0.0f, 1.0f
                 };
     }

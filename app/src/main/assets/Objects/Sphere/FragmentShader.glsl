@@ -40,7 +40,7 @@ void main(void)
 
     // Compute the diffuse and specular components for each fragment
     vec3 diffuse = max(dot(N, L), 0.0) * vec3(uColor);
-    vec3 specular = pow(max(dot(V, R), 0.0), specular_power) * specular_albedo;
+    vec3 specular = pow(max(dot(V, R), 0.0), specular_power) * uColor.rgb;//specular_albedo;
     vec3 rim = rim_lighting(N,V);
 
     // Write final color to the framebuffer

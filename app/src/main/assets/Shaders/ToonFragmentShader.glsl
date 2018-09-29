@@ -28,11 +28,11 @@ void main(void)
     // Sample from cell shading colors
     if(tc < 0.00001)
     {
-        color = dark * 4.0*(tc * 0.8 + 0.2);
+        color = dark;// * 4.0*(tc * 0.8 + 0.2);
     }
-    else if(tc < 0.93)
+    else if(tc < 0.8)
     {
-        color = ambient * (tc * 0.8 + 0.2);
+        color = ambient;// * (tc * 0.8 + 0.2);
     }
     else
     {

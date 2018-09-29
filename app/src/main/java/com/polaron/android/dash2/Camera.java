@@ -14,7 +14,7 @@ public class Camera {
     float[] up = new float[]{0.0f, 1.0f, 0.0f};
 
     //float[] lightPosition = new float[]{-5.0f, 10.0f, -10.0f};
-    float[] lightPosition = new float[]{0.0f, 0.0f, -2.0f};
+    float[] lightPosition = new float[]{0.0f, 0.0f, 2.0f};
 
     float[] viewMatrix;
     float[] projectionMatrix;
@@ -22,14 +22,18 @@ public class Camera {
     Camera()
     {
         viewMatrix = vmath.lookat(eye, center, up);
-        projectionMatrix = vmath.perspective(60.0f, 9.0f/16.0f, 0.1f, 100.0f);
+        //projectionMatrix = vmath.orthogonal(1.0f, 16.0f/9.0f, 0.0f, 100.0f);
+        projectionMatrix = vmath.perspective(60.0f, 9.0f/16.0f, 0.1f, 1000.0f);
     }
 
     public void setPosition(float[] position)
     {
         eye = position;
+        //float[] f = vmath.normalize(vmath.subtractVectors(eye, center));
+        //up = vmath.cross(new float[]{-f[1], f[2], f[0]}, f);
         viewMatrix = vmath.lookat(eye, center, up);
     }
+
     void render(int programID)
     {
         uLocs.CAMERA = GLES30.glGetUniformLocation(programID, "camera_pos");
@@ -41,5 +45,10 @@ public class Camera {
         GLES30.glUniform3fv(uLocs.LIGHT, 1, lightPosition, 0);
         GLES30.glUniformMatrix4fv(uLocs.VIEW, 1, false, viewMatrix, 0);
         GLES30.glUniformMatrix4fv(uLocs.PROJECTION, 1, false, projectionMatrix, 0);
+    }
+
+    public void setLightPosition(float[] lightPosition)
+    {
+        this.lightPosition = lightPosition;
     }
 }
