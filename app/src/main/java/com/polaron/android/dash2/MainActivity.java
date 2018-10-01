@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
         // as the ContentView for this Activity.
         glSurface = new GLSurfaceView(this);
         glSurface.setEGLContextClientVersion(2);
-        mRenderer = new MainRenderer();
+        mRenderer = new MainRenderer(width/height);
         glSurface.setRenderer(mRenderer);
         setContentView(glSurface);
 

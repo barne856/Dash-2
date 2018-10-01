@@ -9,7 +9,7 @@ public class Camera {
     }
     UniformLocations uLocs = new UniformLocations();
 
-    float[] eye = new float[]{0.0f, 0.0f, -5.0f};
+    float[] eye = new float[]{0.0f, 0.0f, 1.0f};
     float[] center = new float[]{0.0f, 0.0f, 0.0f};
     float[] up = new float[]{0.0f, 1.0f, 0.0f};
 
@@ -19,11 +19,11 @@ public class Camera {
     float[] viewMatrix;
     float[] projectionMatrix;
 
-    Camera()
+    Camera(float aspect)
     {
         viewMatrix = vmath.lookat(eye, center, up);
         //projectionMatrix = vmath.orthogonal(1.0f, 16.0f/9.0f, 0.0f, 100.0f);
-        projectionMatrix = vmath.perspective(60.0f, 9.0f/16.0f, 0.1f, 1000.0f);
+        projectionMatrix = vmath.perspective(60.0f, aspect, 0.1f, 1000.0f);
     }
 
     public void setPosition(float[] position)
@@ -31,6 +31,8 @@ public class Camera {
         eye = position;
         //float[] f = vmath.normalize(vmath.subtractVectors(eye, center));
         //up = vmath.cross(new float[]{-f[1], f[2], f[0]}, f);
+        center[0] = position[0];
+        center[1] = position[1];
         viewMatrix = vmath.lookat(eye, center, up);
     }
 
