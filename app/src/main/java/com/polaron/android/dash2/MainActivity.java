@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
             float x = event.getX();
             float y = event.getY();
             mRenderer.touchPos = screenToWorld(new float[]{x,y});
+            mRenderer.ploom = 1;
         }
 
         return super.onTouchEvent(event);

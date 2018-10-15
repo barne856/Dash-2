@@ -6,6 +6,7 @@ in vec3 normalInterp;
 in vec3 vertPos;
 
 in vec3 lightPos;
+flat in float elevation;
 
 //uniform int mode;
 
@@ -64,5 +65,6 @@ void main() {
       // have been linearized, i.e. have no gamma correction in them)
       vec3 colorGammaCorrected = pow(colorLinear, vec3(1.0/screenGamma));
       // use the gamma corrected color in the fragment
+      colorGammaCorrected.r = 1.0-elevation;
       color = vec4(colorGammaCorrected, 1.0);
 }

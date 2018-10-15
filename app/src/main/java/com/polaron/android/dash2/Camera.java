@@ -22,7 +22,7 @@ public class Camera {
     Camera(float aspect)
     {
         viewMatrix = vmath.lookat(eye, center, up);
-        //projectionMatrix = vmath.orthogonal(1.0f, 16.0f/9.0f, 0.0f, 100.0f);
+        //projectionMatrix = vmath.orthogonal(1.0f, 1.0f/aspect, 0.0f, 1000.0f);
         projectionMatrix = vmath.perspective(60.0f, aspect, 0.1f, 1000.0f);
     }
 
